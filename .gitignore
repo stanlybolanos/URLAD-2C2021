@@ -1,13 +1,13 @@
 *.tmp
 
 # Word temporary
-~$*.doc*
+*.doc*
 
 # Excel temporary
-~$*.xls*
+*.xls*
 
 # Excel Backup File
 *.xlk
 
 # PowerPoint temporary
-~$*.ppt*
+*.ppt*
