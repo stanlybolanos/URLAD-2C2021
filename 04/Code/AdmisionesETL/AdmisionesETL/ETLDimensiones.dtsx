@@ -1,0 +1,811 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/1/2021 9:24:07 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-8I49HL8"
+  DTS:CreatorName="DESKTOP-8I49HL8\stanl"
+  DTS:DTSID="{01771E25-7A9B-44E6-99D8-E9E33463181B}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.170"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="4"
+  DTS:VersionGUID="{7739D68A-8825-426E-A525-E291B3EAC759}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[localhost.Admisiones]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{776C39D1-5573-40A8-931F-0628479EADA8}"
+      DTS:ObjectName="localhost.Admisiones">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=Admisiones;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[localhost.Admisiones_DWH]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{2D3E6897-C922-4418-8BF7-6B08DDC0337A}"
+      DTS:ObjectName="localhost.Admisiones_DWH">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=Admisiones_DWH;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Carga de Dimensiones"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{9E4B2358-C165-4913-9DF9-ADBABB4F2F89}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Carga de Dimensiones">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Dimensiones\Dimension Candidato"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{A425D5BE-FC0A-418E-9F71-0093F7C62FFF}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Dimension Candidato"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje"
+                  componentClassID="Microsoft.DerivedColumn"
+                  contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+                  name="Columnas de Linaje"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Inputs[Derived Column Input]"
+                      description="Input to the Derived Column Transformation"
+                      name="Derived Column Input">
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Output]"
+                      description="Default Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      name="Derived Column Output"
+                      synchronousInputId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Output].Columns[ID_Batch]"
+                          dataType="guid"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Output].Columns[ID_Batch]"
+                          name="ID_Batch"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">(DT_GUID)@[System::ExecutionInstanceGUID]</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">(DT_GUID)@[System::ExecutionInstanceGUID]</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Output].Columns[ID_SourceSystem]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="50"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Output].Columns[ID_SourceSystem]"
+                          name="ID_SourceSystem"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">(DT_STR,50,1252)@[System::PackageName]</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">(DT_STR,50,1252)@[System::PackageName]</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Error Output]"
+                      description="Error Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Derived Column Error Output"
+                      synchronousInputId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="Fuente Candidato"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT C.ID_Candidato, 
+			CC.ID_Colegio, 
+			D.ID_Diversificado, 
+			C.Nombre as NombreCandidato, 
+			C.Apellido as ApellidoCandidato, 
+			C.Genero, 
+			C.FechaNacimiento, 
+			CC.Nombre as NombreColegio, 
+			D.Nombre as NombreDiversificado
+			  --Columnas Auditoria
+			  ,GETDATE() AS FechaCreacion
+			  ,CAST(SUSER_NAME() AS nvarchar(100)) AS UsuarioCreacion
+			  ,GETDATE() AS FechaModificacion
+			  ,CAST(SUSER_NAME() AS nvarchar(100)) AS UsuarioModificacion
+	FROM Admisiones.DBO.Candidato C
+		INNER JOIN Admisiones.DBO.ColegioCandidato CC ON(C.ID_Colegio = CC.ID_Colegio)
+		INNER JOIN Admisiones.DBO.Diversificado D ON(C.ID_Diversificado = D.ID_Diversificado);</property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">2</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[localhost.Admisiones]"
+                      connectionManagerRefId="Package.ConnectionManagers[localhost.Admisiones]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[ID_Candidato]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[ID_Candidato]"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[ID_Candidato]"
+                          name="ID_Candidato"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[ID_Colegio]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[ID_Colegio]"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[ID_Colegio]"
+                          name="ID_Colegio"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[ID_Diversificado]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[ID_Diversificado]"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[ID_Diversificado]"
+                          name="ID_Diversificado"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[NombreCandidato]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[NombreCandidato]"
+                          length="300"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[NombreCandidato]"
+                          name="NombreCandidato"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[ApellidoCandidato]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[ApellidoCandidato]"
+                          length="300"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[ApellidoCandidato]"
+                          name="ApellidoCandidato"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[Genero]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[Genero]"
+                          length="1"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[Genero]"
+                          name="Genero"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[FechaNacimiento]"
+                          dataType="dbTimeStamp"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[FechaNacimiento]"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[FechaNacimiento]"
+                          name="FechaNacimiento"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[NombreColegio]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[NombreColegio]"
+                          length="600"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[NombreColegio]"
+                          name="NombreColegio"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[NombreDiversificado]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[NombreDiversificado]"
+                          length="600"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[NombreDiversificado]"
+                          name="NombreDiversificado"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[FechaCreacion]"
+                          dataType="dbTimeStamp"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[FechaCreacion]"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[FechaCreacion]"
+                          name="FechaCreacion"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[UsuarioCreacion]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[UsuarioCreacion]"
+                          length="100"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[UsuarioCreacion]"
+                          name="UsuarioCreacion"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                          dataType="dbTimeStamp"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                          name="FechaModificacion"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[UsuarioModificacion]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[UsuarioModificacion]"
+                          length="100"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].Columns[UsuarioModificacion]"
+                          name="UsuarioModificacion"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[ID_Candidato]"
+                          dataType="i4"
+                          name="ID_Candidato" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[ID_Colegio]"
+                          dataType="i4"
+                          name="ID_Colegio" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[ID_Diversificado]"
+                          dataType="i4"
+                          name="ID_Diversificado" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[NombreCandidato]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          name="NombreCandidato" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[ApellidoCandidato]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          name="ApellidoCandidato" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[Genero]"
+                          codePage="1252"
+                          dataType="str"
+                          length="1"
+                          name="Genero" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[FechaNacimiento]"
+                          dataType="dbTimeStamp"
+                          name="FechaNacimiento" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[NombreColegio]"
+                          codePage="1252"
+                          dataType="str"
+                          length="600"
+                          name="NombreColegio" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[NombreDiversificado]"
+                          codePage="1252"
+                          dataType="str"
+                          length="600"
+                          name="NombreDiversificado" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[FechaCreacion]"
+                          dataType="dbTimeStamp"
+                          name="FechaCreacion" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[UsuarioCreacion]"
+                          dataType="wstr"
+                          length="100"
+                          name="UsuarioCreacion" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                          dataType="dbTimeStamp"
+                          name="FechaModificacion" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output].ExternalColumns[UsuarioModificacion]"
+                          dataType="wstr"
+                          length="100"
+                          name="UsuarioModificacion" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ID_Candidato]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ID_Candidato]"
+                          name="ID_Candidato" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ID_Colegio]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ID_Colegio]"
+                          name="ID_Colegio" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ID_Diversificado]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ID_Diversificado]"
+                          name="ID_Diversificado" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[NombreCandidato]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[NombreCandidato]"
+                          name="NombreCandidato" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ApellidoCandidato]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ApellidoCandidato]"
+                          name="ApellidoCandidato" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[Genero]"
+                          codePage="1252"
+                          dataType="str"
+                          length="1"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[Genero]"
+                          name="Genero" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[FechaNacimiento]"
+                          dataType="dbTimeStamp"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[FechaNacimiento]"
+                          name="FechaNacimiento" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[NombreColegio]"
+                          codePage="1252"
+                          dataType="str"
+                          length="600"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[NombreColegio]"
+                          name="NombreColegio" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[NombreDiversificado]"
+                          codePage="1252"
+                          dataType="str"
+                          length="600"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[NombreDiversificado]"
+                          name="NombreDiversificado" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[FechaCreacion]"
+                          dataType="dbTimeStamp"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[FechaCreacion]"
+                          name="FechaCreacion" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[UsuarioCreacion]"
+                          dataType="wstr"
+                          length="100"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[UsuarioCreacion]"
+                          name="UsuarioCreacion" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                          dataType="dbTimeStamp"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                          name="FechaModificacion" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[UsuarioModificacion]"
+                          dataType="wstr"
+                          length="100"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[UsuarioModificacion]"
+                          name="UsuarioModificacion" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension"
+                  componentClassID="Microsoft.SCD"
+                  contactInfo="Slowly Changing Dimension;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;3"
+                  description="Updates a SQL Server Analysis Services data warehouse dimension. Update dimension records that are already present and  insert dimension records that aren't. For example, update the DimProduct table of the AdventureWorksDW OLAP database with data from the Products table in the AdventureWorks OLTP database."
+                  name="Slowly Changing Dimension"
+                  version="3">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the SELECT statement used to create a schema rowset."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the WHERE clause in the SELECT statement that selects the current row among rows with identical business keys."
+                      name="CurrentRowWhere"></property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether historical attribute updates are directed to the transformation output for changing attribute updates."
+                      name="UpdateChangingAttributeHistory">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the transformation fails when columns with fixed attributes contain changes."
+                      name="FailOnFixedAttributeChange">true</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the column name for the inferred member."
+                      name="InferredMemberIndicator"></property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether inferred member updates are detected."
+                      name="EnableInferredMember">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the transformation fails when a lookup of an existing record fails."
+                      name="FailOnLookupFailure">false</property>
+                    <property
+                      dataType="System.UInt32"
+                      description="Specifies that all rows in the input are new or the transformation detects the change type."
+                      name="IncomingRowChangeType"
+                      typeConverter="IncomingRowChangeType">1</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Connections[LookupConnection]"
+                      description="Defines the connection to use for lookups in the dimension table"
+                      name="LookupConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]"
+                      name="Slowly Changing Dimension Input">
+                      <externalMetadataColumns
+                        isUsed="True" />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Outputs[Unchanged Output]"
+                      description="Unchanged rows"
+                      exclusionGroup="1"
+                      name="Unchanged Output"
+                      synchronousInputId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Outputs[New Output]"
+                      description="New rows"
+                      exclusionGroup="1"
+                      name="New Output"
+                      synchronousInputId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Outputs[Fixed Attribute Output]"
+                      description="Rows with changes in columns tagged FixedAttribute"
+                      exclusionGroup="1"
+                      name="Fixed Attribute Output"
+                      synchronousInputId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Outputs[Changing Attribute Updates Output]"
+                      description="These rows contain new information for ChangingAttribute (Type 1) column changes"
+                      exclusionGroup="1"
+                      name="Changing Attribute Updates Output"
+                      synchronousInputId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Outputs[Historical Attribute Inserts Output]"
+                      description="HistoricalAttribute (Type 2) changes result in these new rows"
+                      exclusionGroup="2"
+                      name="Historical Attribute Inserts Output"
+                      synchronousInputId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Outputs[Inferred Member Updates Output]"
+                      description="Information to update unpopulated initial dimension row"
+                      exclusionGroup="1"
+                      name="Inferred Member Updates Output"
+                      synchronousInputId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Carga de Dimensiones\Dimension Candidato.Paths[Derived Column Output]"
+                  endId="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]"
+                  name="Derived Column Output"
+                  startId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Outputs[Derived Column Output]" />
+                <path
+                  refId="Package\Carga de Dimensiones\Dimension Candidato.Paths[OLE DB Source Output]"
+                  endId="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje.Inputs[Derived Column Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Dimensiones\Dimension Carrera"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{ab78d8a3-2338-40b4-9c22-463783cf44a4}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Dimension Carrera"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Dimensiones\Dmension Fecha"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Esta tarea ejectuara el procedure USP_FillDimDate"
+          DTS:DTSID="{5F2F1282-FCCC-4840-A951-DE2EFA29DD47}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Dmension Fecha"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{2D3E6897-C922-4418-8BF7-6B08DDC0337A}"
+              SQLTask:SqlStatementSource="&#x9;DECLARE @FechaMaxima DATETIME=DATEADD(YEAR,2,GETDATE())&#xA;&#x9;--Fecha&#xA;&#x9;IF ISNULL((SELECT MAX(Date) FROM Dimension.Fecha),'1900-01-01')&lt;@FechaMaxima&#xA;&#x9;begin&#xA;&#x9;&#x9;EXEC USP_FillDimDate @CurrentDate = '2016-01-01', &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9; @EndDate     = @FechaMaxima&#xA;&#x9;end" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="181.333333333334,42.6666666666667"
+          Id="Package\Carga de Dimensiones\Dimension Candidato"
+          TopLeft="53.4999969080091,122.385970089464" />
+        <NodeLayout
+          Size="169.333333333334,42.6666666666667"
+          Id="Package\Carga de Dimensiones\Dimension Carrera"
+          TopLeft="56.8333301916719,217.298250645262" />
+        <NodeLayout
+          Size="160,42.6666666666667"
+          Id="Package\Carga de Dimensiones\Dmension Fecha"
+          TopLeft="63.7083300892263,19.8684243001767" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="284,314.666666666667"
+          Size="284,358"
+          Id="Package\Carga de Dimensiones"
+          TopLeft="98.1249985378237,81.421054164128" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Carga de Dimensiones\Dimension Candidato">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="164,42.6666666666667"
+          Id="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato"
+          TopLeft="264.732138912327,114.360904408199" />
+        <NodeLayout
+          Size="173.333333333334,42.6666666666667"
+          Id="Package\Carga de Dimensiones\Dimension Candidato\Columnas de Linaje"
+          TopLeft="263.839281782774,214.548876218802" />
+        <EdgeLayout
+          Id="Package\Carga de Dimensiones\Dimension Candidato.Paths[OLE DB Source Output]"
+          TopLeft="348.619043680884,157.027571074866">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,57.5213051439355"
+              Start="0,0"
+              End="0,50.0213051439355">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,50.0213051439355" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="212,42.6666666666667"
+          Id="Package\Carga de Dimensiones\Dimension Candidato\Slowly Changing Dimension"
+          TopLeft="238.437496447004,329.105269352485" />
+        <EdgeLayout
+          Id="Package\Carga de Dimensiones\Dimension Candidato.Paths[Derived Column Output]"
+          TopLeft="347.471722448223,257.215542885468">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,71.8897264670167"
+              Start="0,0"
+              End="0,64.3897264670167">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,64.3897264670167" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Carga de Dimensiones\Dimension Candidato\Fuente Candidato">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/1/2021 9:46:05 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-8I49HL8"
+  DTS:CreatorName="DESKTOP-8I49HL8\stanl"
+  DTS:DTSID="{C42A797A-89C9-4A22-A0A3-77F9E15C9432}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.170"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package1"
+  DTS:PackageType="5"
+  DTS:VersionBuild="1"
+  DTS:VersionGUID="{7974EE56-7417-44CE-A75E-345A83842115}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Carga de Fact"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{ba2504a8-af21-43ad-aee3-c47a9ad47720}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Carga de Fact">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Fact\Actualizar Fact"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{13f17656-7c41-4cdf-8293-8d7c3f1fbb66}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Actualizar Fact"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Fact\Carga sobre Staging"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{5f58f901-b366-416a-9507-c3b10778e90a}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Carga sobre Staging"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Fact\Limpiar Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{b71cdd7f-8ed8-4891-ba35-64eca1599148}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Limpiar Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Fact\Ultima Fecha Ejecucion"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{6dc05497-0114-4a9f-824e-a2fbe19f2728}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Ultima Fecha Ejecucion"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Carga de Fact.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{daacfd26-7db5-42a0-bf40-9acfe6e2fbf9}"
+          DTS:From="Package\Carga de Fact\Carga sobre Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\Carga de Fact\Actualizar Fact" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Carga de Fact.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{c6a84734-5abe-4846-b050-e8ae24c43295}"
+          DTS:From="Package\Carga de Fact\Limpiar Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\Carga de Fact\Ultima Fecha Ejecucion" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Carga de Fact.PrecedenceConstraints[Constraint 2]"
+          DTS:CreationName=""
+          DTS:DTSID="{cf7ce946-3167-46f6-9a95-4a73158d3b02}"
+          DTS:From="Package\Carga de Fact\Ultima Fecha Ejecucion"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 2"
+          DTS:To="Package\Carga de Fact\Carga sobre Staging" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="150.666666666667,42.6666666666667"
+          Id="Package\Carga de Fact\Actualizar Fact"
+          TopLeft="78.1666569684943,289.438605377439" />
+        <NodeLayout
+          Size="177.333333333334,42.6666666666667"
+          Id="Package\Carga de Fact\Carga sobre Staging"
+          TopLeft="82.7499902335309,212.807024987671" />
+        <NodeLayout
+          Size="153.333333333334,42.6666666666667"
+          Id="Package\Carga de Fact\Limpiar Staging"
+          TopLeft="88.5833234799409,15.2982493402336" />
+        <NodeLayout
+          Size="192,42.6666666666667"
+          Id="Package\Carga de Fact\Ultima Fecha Ejecucion"
+          TopLeft="65.6666571547588,101.964917638185" />
+        <EdgeLayout
+          Id="Package\Carga de Fact.PrecedenceConstraints[Constraint]"
+          TopLeft="171.416656900198,255.473691654338">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-17.9166665983699,33.9649137231012"
+              Start="0,0"
+              End="-17.9166665983699,26.4649137231012">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,12.9824568615506" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,12.9824568615506"
+                    Point2="0,16.9824568615506"
+                    Point3="-4,16.9824568615506" />
+                  <mssgle:LineSegment
+                    End="-13.9166665983699,16.9824568615506" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-13.9166665983699,16.9824568615506"
+                    Point2="-17.9166665983699,16.9824568615506"
+                    Point3="-17.9166665983699,20.9824568615506" />
+                  <mssgle:LineSegment
+                    End="-17.9166665983699,26.4649137231012" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Carga de Fact.PrecedenceConstraints[Constraint 1]"
+          TopLeft="163.458323650683,57.9649160069002">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44.0000016312851"
+              Start="0,0"
+              End="0,36.5000016312851">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5000016312851" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Carga de Fact.PrecedenceConstraints[Constraint 2]"
+          TopLeft="161.666657154759,144.631584304852">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="9.74999974543874,68.175440682819"
+              Start="0,0"
+              End="9.74999974543874,60.675440682819">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,30.0877203414095" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,30.0877203414095"
+                    Point2="0,34.0877203414095"
+                    Point3="4,34.0877203414095" />
+                  <mssgle:LineSegment
+                    End="5.74999974543874,34.0877203414095" />
+                  <mssgle:CubicBezierSegment
+                    Point1="5.74999974543874,34.0877203414095"
+                    Point2="9.74999974543874,34.0877203414095"
+                    Point3="9.74999974543874,38.0877203414095" />
+                  <mssgle:LineSegment
+                    End="9.74999974543874,60.675440682819" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="334,386.666666666667"
+          Size="334,430"
+          Id="Package\Carga de Fact"
+          TopLeft="60,60" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
