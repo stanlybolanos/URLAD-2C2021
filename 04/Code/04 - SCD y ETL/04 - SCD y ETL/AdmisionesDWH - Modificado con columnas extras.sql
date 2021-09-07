@@ -91,8 +91,8 @@ CREATE TABLE [Dimension].[Candidato](
 	[FechaInicioValidez] DATETIME NOT NULL DEFAULT(GETDATE()),
 	[FechaFinValidez] DATETIME NULL,
 	--Columnas Auditoria
-	FechaCreacion DATETIME NOT NULL DEFAULT(GETDATE()),
-	UsuarioCreacion NVARCHAR(100) NOT NULL DEFAULT(SUSER_NAME()),
+	FechaCreacion DATETIME NULL DEFAULT(GETDATE()),
+	UsuarioCreacion NVARCHAR(100) NULL DEFAULT(SUSER_NAME()),
 	FechaModificacion DATETIME NULL,
 	UsuarioModificacion NVARCHAR(100) NULL,
 	--Columnas Linaje
@@ -168,6 +168,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 /****** Object:  Table [Fact].[Examen]    Script Date: 8/31/2020 5:11:56 PM ******/
+DROP TABLE IF EXISTS FACT.Examen 
+GO
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -185,6 +188,8 @@ CREATE TABLE [Fact].[Examen](
 	[NotaTotal] [dbo].[UDT_Decimal5.2] NULL,
 	[NotaArea] [dbo].[UDT_Decimal5.2] NULL,
 	[NombreMateria] [dbo].[UDT_VarcharMediano] NULL,
+	[FechaPrueba] DATETIME NOT NULL,
+	[FechaModificacionSource] DATETIME NULL,
 	--Columnas Auditoria
 	FechaCreacion DATETIME NOT NULL DEFAULT(GETDATE()),
 	UsuarioCreacion VARCHAR(100) NOT NULL DEFAULT(SUSER_NAME()),
@@ -241,6 +246,7 @@ INSERT INTO Dimension.Carrera
 			  --Columnas Linaje
 			  ,'1-ETL' as ID_Batch
 			  ,'Admisiones' as ID_SourceSystem
+			  ,CAST('2020-01-01' AS DATETIME) as FechaInicioValidez
 
 	FROM Admisiones.dbo.Facultad F
 		INNER JOIN Admisiones.dbo.Carrera C ON(C.ID_Facultad = F.ID_Facultad);
@@ -282,6 +288,7 @@ INSERT INTO Dimension.Carrera
 			  --Columnas Linaje
 			  ,'1-ETL' as ID_Batch
 			  ,'Admisiones' as ID_SourceSystem
+			  ,CAST('2020-01-01' AS DATETIME) as FechaInicioValidez
 	FROM Admisiones.DBO.Candidato C
 		INNER JOIN Admisiones.DBO.ColegioCandidato CC ON(C.ID_Colegio = CC.ID_Colegio)
 		INNER JOIN Admisiones.DBO.Diversificado D ON(C.ID_Diversificado = D.ID_Diversificado);
@@ -294,10 +301,9 @@ INSERT INTO Dimension.Carrera
 	AS
 		BEGIN
 			SET NOCOUNT ON;
-			DELETE FROM Dimension.Fecha;
-
 			WHILE @CurrentDate < @EndDate
 				BEGIN
+					IF NOT EXISTS (SELECT 1 FROM Dimension.Fecha WHERE DATE = @CurrentDate)
 					INSERT INTO Dimension.Fecha
 					([DateKey], 
 					 [Date], 

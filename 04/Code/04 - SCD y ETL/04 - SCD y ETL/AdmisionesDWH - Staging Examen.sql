@@ -14,6 +14,7 @@ CREATE TABLE FactLog
 )
 GO
 
+/*
 select top 1 FechaEjecucion 
 from FactLog
 order by FechaEjecucion DESC
@@ -35,7 +36,7 @@ FROM dbo.FactLog
 --Transformamos nuestra columna a UNIQUEID
 ALTER TABLE Fact.Examen
 ALTER COLUMN ID_Batch UNIQUEIDENTIFIER
-GO
+GO*/
 
 --Agregamos FK
 ALTER TABLE Fact.Examen ADD CONSTRAINT [FK_IDBatch] FOREIGN KEY (ID_Batch) 
@@ -63,7 +64,9 @@ CREATE TABLE [staging].[Examen](
 	[ID_Materia] [int] NOT NULL,
 	[NombreMateria] [varchar](300) NOT NULL,
 	[Descripcion] [varchar](300)  NULL,
-	[PorcentajeDescuento] [decimal](6, 2) NULL
+	[PorcentajeDescuento] [decimal](6, 2) NULL,
+	[FechaModificacionSource] DATETIME NULL,
+
 ) ON [PRIMARY]
 GO
 
@@ -80,30 +83,31 @@ SELECT r.ID_Examen,
 	   ea.ID_Materia,
        ea.NombreMateria,
        d.[Descripcion], 
-       d.[PorcentajeDescuento]
-FROM Admisiones.DBO.Examen R
-     INNER JOIN Admisiones.DBO.Examen_Detalle RR ON(R.ID_Examen = RR.ID_Examen)
-     INNER JOIN Admisiones.DBO.Materia EA ON(EA.ID_Materia = RR.ID_Materia)
-     LEFT JOIN Admisiones.DBO.Descuento D ON(D.ID_Descuento = R.ID_Descuento)
-
+       d.[PorcentajeDescuento],
+	   R.FechaModificacion
+FROM DBO.Examen R
+     INNER JOIN DBO.Examen_Detalle RR ON(R.ID_Examen = RR.ID_Examen)
+     INNER JOIN DBO.Materia EA ON(EA.ID_Materia = RR.ID_Materia)
+     LEFT JOIN DBO.Descuento D ON(D.ID_Descuento = R.ID_Descuento)
+WHERE ((FechaPrueba>?) OR (FechaModificacion>?))
 go
 
 --Script de SP para MERGE
-ALTER	 PROCEDURE USP_MergeFact
+CREATE PROCEDURE USP_MergeFact
 as
 BEGIN
 
 	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRAN
-		DECLARE @NuevoGUIDInsert UNIQUEIDENTIFIER = NEWID()
+		DECLARE @NuevoGUIDInsert UNIQUEIDENTIFIER = NEWID(), @MaxFechaEjecucion DATETIME, @RowsAffected INT
 
-		INSERT INTO FactLog
-		VALUES (@NuevoGUIDInsert,getdate(),NULL)
+		INSERT INTO FactLog ([ID_Batch], [FechaEjecucion], [NuevosRegistros])
+		VALUES (@NuevoGUIDInsert,NULL,NULL)
 		
 		MERGE Fact.Examen AS T
 		USING (
-			SELECT [SK_Candidato], [SK_Carrera], [DateKey], [ID_Examen], [ID_Descuento], r.Descripcion AS DescripcionDescuento, [PorcentajeDescuento], [Precio], r.Nota as NotaTotal, [NotaArea], [NombreMateria], getdate() as FechaCreacion, 'ETL' as UsuarioCreacion, NULL as FechaModificacion, NULL as UsuarioModificacion, @NuevoGUIDINsert as ID_Batch, 'ssis' as ID_SourceSystem
+			SELECT [SK_Candidato], [SK_Carrera], [DateKey], [ID_Examen], [ID_Descuento], r.Descripcion AS DescripcionDescuento, [PorcentajeDescuento], [Precio], r.Nota as NotaTotal, [NotaArea], [NombreMateria], getdate() as FechaCreacion, 'ETL' as UsuarioCreacion, NULL as FechaModificacion, NULL as UsuarioModificacion, @NuevoGUIDINsert as ID_Batch, 'ssis' as ID_SourceSystem, r.FechaPrueba, r.FechaModificacionSource
 			FROM STAGING.Examen R
 				INNER JOIN Dimension.Candidato C ON(C.ID_Candidato = R.ID_Candidato and
 													R.FechaPrueba BETWEEN c.FechaInicioValidez AND ISNULL(c.FechaFinValidez, '9999-12-31')) 
@@ -113,11 +117,22 @@ BEGIN
 				) AS S ON (S.ID_examen = T.ID_Examen)
 
 		WHEN NOT MATCHED BY TARGET THEN --No existe en Fact
-		INSERT ([SK_Candidato], [SK_Carrera], [DateKey], [ID_Examen], [ID_Descuento], [DescripcionDescuento], [PorcentajeDescuento], [Precio], [NotaTotal], [NotaArea], [NombreMateria], [FechaCreacion], [UsuarioCreacion], [FechaModificacion], [UsuarioModificacion], [ID_Batch], [ID_SourceSystem])
-		VALUES (S.[SK_Candidato], S.[SK_Carrera], S.[DateKey], S.[ID_Examen], S.[ID_Descuento], S.[DescripcionDescuento], S.[PorcentajeDescuento], S.[Precio], S.[NotaTotal], S.[NotaArea], S.[NombreMateria], S.[FechaCreacion], S.[UsuarioCreacion], S.[FechaModificacion], S.[UsuarioModificacion], S.[ID_Batch], S.[ID_SourceSystem]);
+		INSERT ([SK_Candidato], [SK_Carrera], [DateKey], [ID_Examen], [ID_Descuento], [DescripcionDescuento], [PorcentajeDescuento], [Precio], [NotaTotal], [NotaArea], [NombreMateria], [FechaCreacion], [UsuarioCreacion], [FechaModificacion], [UsuarioModificacion], [ID_Batch], [ID_SourceSystem], FechaPrueba, FechaModificacionSource)
+		VALUES (S.[SK_Candidato], S.[SK_Carrera], S.[DateKey], S.[ID_Examen], S.[ID_Descuento], S.[DescripcionDescuento], S.[PorcentajeDescuento], S.[Precio], S.[NotaTotal], S.[NotaArea], S.[NombreMateria], S.[FechaCreacion], S.[UsuarioCreacion], S.[FechaModificacion], S.[UsuarioModificacion], S.[ID_Batch], S.[ID_SourceSystem], S.FechaPrueba, S.FechaModificacionSource);
+
+		SET @RowsAffected =@@ROWCOUNT
+
+		SELECT @MaxFechaEjecucion=MAX(MaxFechaEjecucion)
+		FROM(
+			SELECT MAX(FechaPrueba) as MaxFechaEjecucion
+			FROM FACT.Examen
+			UNION
+			SELECT MAX(FechaModificacionSource)  as MaxFechaEjecucion
+			FROM FACT.Examen
+		)AS A
 
 		UPDATE FactLog
-		SET NuevosRegistros=@@ROWCOUNT
+		SET NuevosRegistros=@RowsAffected, FechaEjecucion = @MaxFechaEjecucion
 		WHERE ID_Batch = @NuevoGUIDInsert
 
 		COMMIT
@@ -131,12 +146,6 @@ BEGIN
 END
 go
 
-SELECT * FROM staging.Examen
-
-SELECT * FROM FACT.Examen
-
-SELECT * FROM Admisiones_DWH.DBO.FactLog
-ORDER BY FechaEjecucion ASC
 
 --Test de SCD
 USE Admisiones
