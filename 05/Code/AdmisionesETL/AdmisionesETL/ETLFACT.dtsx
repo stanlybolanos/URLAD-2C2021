@@ -1,0 +1,1001 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/1/2021 9:46:05 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-8I49HL8"
+  DTS:CreatorName="DESKTOP-8I49HL8\stanl"
+  DTS:DTSID="{C42A797A-89C9-4A22-A0A3-77F9E15C9432}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.170"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package1"
+  DTS:PackageType="5"
+  DTS:VersionBuild="5"
+  DTS:VersionGUID="{0477B21A-56FE-4711-89B3-F3A766620B88}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[localhost.Admisiones]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{FAF984AB-FF79-479F-A41F-A85F05AD3460}"
+      DTS:ObjectName="localhost.Admisiones">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=Admisiones;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[localhost.Admisiones_DWH]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{AA7F2063-0CC1-4A89-812D-58F3B83BE2F5}"
+      DTS:ObjectName="localhost.Admisiones_DWH">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=Admisiones_DWH;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{D335C514-B079-4DEA-9D77-B262D09B25FC}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="vFechaEjecucion">
+      <DTS:VariableValue
+        DTS:DataType="7">9/6/2021 9:40:00 PM</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Carga de Fact"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{ba2504a8-af21-43ad-aee3-c47a9ad47720}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Carga de Fact">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Fact\Actualizar Fact"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{13f17656-7c41-4cdf-8293-8d7c3f1fbb66}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Actualizar Fact"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{AA7F2063-0CC1-4A89-812D-58F3B83BE2F5}"
+              SQLTask:SqlStatementSource="EXEC USP_MergeFact" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Fact\Carga sobre Staging"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{5f58f901-b366-416a-9507-c3b10778e90a}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Carga sobre Staging"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="Carga Staging Examen"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[staging].[Examen]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[localhost.Admisiones_DWH]"
+                      connectionManagerRefId="Package.ConnectionManagers[localhost.Admisiones_DWH]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[ID_Examen]"
+                          cachedDataType="i4"
+                          cachedName="ID_Examen"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Examen]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Examen]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[ID_Candidato]"
+                          cachedDataType="i4"
+                          cachedName="ID_Candidato"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Candidato]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Candidato]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[ID_Carrera]"
+                          cachedDataType="i4"
+                          cachedName="ID_Carrera"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Carrera]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Carrera]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[ID_Descuento]"
+                          cachedDataType="i4"
+                          cachedName="ID_Descuento"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Descuento]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Descuento]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[FechaPrueba]"
+                          cachedDataType="dbTimeStamp"
+                          cachedName="FechaPrueba"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[FechaPrueba]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[FechaPrueba]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[Precio]"
+                          cachedDataType="numeric"
+                          cachedName="Precio"
+                          cachedPrecision="6"
+                          cachedScale="2"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[Precio]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[Precio]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[Nota]"
+                          cachedDataType="numeric"
+                          cachedName="Nota"
+                          cachedPrecision="5"
+                          cachedScale="2"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[Nota]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[Nota]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[ID_ExamenDetalle]"
+                          cachedDataType="i4"
+                          cachedName="ID_ExamenDetalle"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_ExamenDetalle]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_ExamenDetalle]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[NotaArea]"
+                          cachedDataType="numeric"
+                          cachedName="NotaArea"
+                          cachedPrecision="5"
+                          cachedScale="2"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[NotaArea]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[NotaArea]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[ID_Materia]"
+                          cachedDataType="i4"
+                          cachedName="ID_Materia"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Materia]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Materia]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[NombreMateria]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="300"
+                          cachedName="NombreMateria"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[NombreMateria]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[NombreMateria]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[Descripcion]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="300"
+                          cachedName="Descripcion"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[Descripcion]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[Descripcion]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[PorcentajeDescuento]"
+                          cachedDataType="numeric"
+                          cachedName="PorcentajeDescuento"
+                          cachedPrecision="6"
+                          cachedScale="2"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[PorcentajeDescuento]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[PorcentajeDescuento]" />
+                        <inputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].Columns[FechaModificacion]"
+                          cachedDataType="dbTimeStamp"
+                          cachedName="FechaModificacion"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacionSource]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[FechaModificacion]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Examen]"
+                          dataType="i4"
+                          name="ID_Examen" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Candidato]"
+                          dataType="i4"
+                          name="ID_Candidato" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Carrera]"
+                          dataType="i4"
+                          name="ID_Carrera" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Descuento]"
+                          dataType="i4"
+                          name="ID_Descuento" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[FechaPrueba]"
+                          dataType="dbTimeStamp"
+                          name="FechaPrueba" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[Precio]"
+                          dataType="numeric"
+                          name="Precio"
+                          precision="6"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[Nota]"
+                          dataType="numeric"
+                          name="Nota"
+                          precision="5"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_ExamenDetalle]"
+                          dataType="i4"
+                          name="ID_ExamenDetalle" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[NotaArea]"
+                          dataType="numeric"
+                          name="NotaArea"
+                          precision="5"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[ID_Materia]"
+                          dataType="i4"
+                          name="ID_Materia" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[NombreMateria]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          name="NombreMateria" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[Descripcion]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          name="Descripcion" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[PorcentajeDescuento]"
+                          dataType="numeric"
+                          name="PorcentajeDescuento"
+                          precision="6"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacionSource]"
+                          dataType="dbTimeStamp"
+                          name="FechaModificacionSource" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="Fuente Examen"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT r.ID_Examen, 
+       r.ID_Candidato, 
+       r.ID_Carrera, 
+       r.ID_Descuento, 
+	   R.FechaPrueba,
+       r.Precio, 
+       r.Nota, 
+       rr.[ID_ExamenDetalle], 
+       rr.[NotaArea], 
+	   ea.ID_Materia,
+       ea.NombreMateria,
+       d.[Descripcion], 
+       d.[PorcentajeDescuento],
+	   R.FechaModificacion
+FROM DBO.Examen R
+     INNER JOIN DBO.Examen_Detalle RR ON(R.ID_Examen = RR.ID_Examen)
+     INNER JOIN DBO.Materia EA ON(EA.ID_Materia = RR.ID_Materia)
+     LEFT JOIN DBO.Descuento D ON(D.ID_Descuento = R.ID_Descuento)
+WHERE ((FechaPrueba&gt;?) OR (FechaModificacion&gt;?))</property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">2</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping">"0:Input",{D335C514-B079-4DEA-9D77-B262D09B25FC};"1:Input",{D335C514-B079-4DEA-9D77-B262D09B25FC};</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[localhost.Admisiones]"
+                      connectionManagerRefId="Package.ConnectionManagers[localhost.Admisiones]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Examen]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Examen]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Examen]"
+                          name="ID_Examen"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Candidato]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Candidato]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Candidato]"
+                          name="ID_Candidato"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Carrera]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Carrera]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Carrera]"
+                          name="ID_Carrera"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Descuento]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Descuento]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Descuento]"
+                          name="ID_Descuento"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[FechaPrueba]"
+                          dataType="dbTimeStamp"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[FechaPrueba]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[FechaPrueba]"
+                          name="FechaPrueba"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[Precio]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[Precio]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[Precio]"
+                          name="Precio"
+                          precision="6"
+                          scale="2"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[Nota]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[Nota]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[Nota]"
+                          name="Nota"
+                          precision="5"
+                          scale="2"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_ExamenDetalle]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_ExamenDetalle]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_ExamenDetalle]"
+                          name="ID_ExamenDetalle"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[NotaArea]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[NotaArea]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[NotaArea]"
+                          name="NotaArea"
+                          precision="5"
+                          scale="2"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Materia]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Materia]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[ID_Materia]"
+                          name="ID_Materia"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[NombreMateria]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[NombreMateria]"
+                          length="300"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[NombreMateria]"
+                          name="NombreMateria"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[Descripcion]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[Descripcion]"
+                          length="300"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[Descripcion]"
+                          name="Descripcion"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[PorcentajeDescuento]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[PorcentajeDescuento]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[PorcentajeDescuento]"
+                          name="PorcentajeDescuento"
+                          precision="6"
+                          scale="2"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                          dataType="dbTimeStamp"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                          name="FechaModificacion"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Examen]"
+                          dataType="i4"
+                          name="ID_Examen" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Candidato]"
+                          dataType="i4"
+                          name="ID_Candidato" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Carrera]"
+                          dataType="i4"
+                          name="ID_Carrera" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Descuento]"
+                          dataType="i4"
+                          name="ID_Descuento" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[FechaPrueba]"
+                          dataType="dbTimeStamp"
+                          name="FechaPrueba" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[Precio]"
+                          dataType="numeric"
+                          name="Precio"
+                          precision="6"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[Nota]"
+                          dataType="numeric"
+                          name="Nota"
+                          precision="5"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_ExamenDetalle]"
+                          dataType="i4"
+                          name="ID_ExamenDetalle" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[NotaArea]"
+                          dataType="numeric"
+                          name="NotaArea"
+                          precision="5"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[ID_Materia]"
+                          dataType="i4"
+                          name="ID_Materia" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[NombreMateria]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          name="NombreMateria" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[Descripcion]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          name="Descripcion" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[PorcentajeDescuento]"
+                          dataType="numeric"
+                          name="PorcentajeDescuento"
+                          precision="6"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                          dataType="dbTimeStamp"
+                          name="FechaModificacion" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Examen]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Examen]"
+                          name="ID_Examen" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Candidato]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Candidato]"
+                          name="ID_Candidato" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Carrera]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Carrera]"
+                          name="ID_Carrera" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Descuento]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Descuento]"
+                          name="ID_Descuento" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[FechaPrueba]"
+                          dataType="dbTimeStamp"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[FechaPrueba]"
+                          name="FechaPrueba" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[Precio]"
+                          dataType="numeric"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[Precio]"
+                          name="Precio"
+                          precision="6"
+                          scale="2" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[Nota]"
+                          dataType="numeric"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[Nota]"
+                          name="Nota"
+                          precision="5"
+                          scale="2" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_ExamenDetalle]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_ExamenDetalle]"
+                          name="ID_ExamenDetalle" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[NotaArea]"
+                          dataType="numeric"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[NotaArea]"
+                          name="NotaArea"
+                          precision="5"
+                          scale="2" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Materia]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ID_Materia]"
+                          name="ID_Materia" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[NombreMateria]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[NombreMateria]"
+                          name="NombreMateria" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[Descripcion]"
+                          codePage="1252"
+                          dataType="str"
+                          length="300"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[Descripcion]"
+                          name="Descripcion" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[PorcentajeDescuento]"
+                          dataType="numeric"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[PorcentajeDescuento]"
+                          name="PorcentajeDescuento"
+                          precision="6"
+                          scale="2" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                          dataType="dbTimeStamp"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                          name="FechaModificacion" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Carga de Fact\Carga sobre Staging.Paths[OLE DB Source Output]"
+                  endId="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen.Inputs[OLE DB Destination Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\Carga de Fact\Carga sobre Staging\Fuente Examen.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Fact\Limpiar Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{b71cdd7f-8ed8-4891-ba35-64eca1599148}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Limpiar Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{AA7F2063-0CC1-4A89-812D-58F3B83BE2F5}"
+              SQLTask:SqlStatementSource="TRUNCATE TABLE STAGING.Examen" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Carga de Fact\Ultima Fecha Ejecucion"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{6dc05497-0114-4a9f-824e-a2fbe19f2728}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Ultima Fecha Ejecucion"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{AA7F2063-0CC1-4A89-812D-58F3B83BE2F5}"
+              SQLTask:SqlStatementSource="SELECT ISNULL(MAX(FechaEjecucion),'1900-01-01') AS UltimaFecha&#xA;FROM FactLog&#xA;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="0"
+                SQLTask:DtsVariableName="User::vFechaEjecucion" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Carga de Fact.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{daacfd26-7db5-42a0-bf40-9acfe6e2fbf9}"
+          DTS:From="Package\Carga de Fact\Carga sobre Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\Carga de Fact\Actualizar Fact" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Carga de Fact.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{c6a84734-5abe-4846-b050-e8ae24c43295}"
+          DTS:From="Package\Carga de Fact\Limpiar Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\Carga de Fact\Ultima Fecha Ejecucion" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Carga de Fact.PrecedenceConstraints[Constraint 2]"
+          DTS:CreationName=""
+          DTS:DTSID="{cf7ce946-3167-46f6-9a95-4a73158d3b02}"
+          DTS:From="Package\Carga de Fact\Ultima Fecha Ejecucion"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 2"
+          DTS:To="Package\Carga de Fact\Carga sobre Staging" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="150.666666666667,42.6666666666667"
+          Id="Package\Carga de Fact\Actualizar Fact"
+          TopLeft="94.8333233868083,300.385974004549" />
+        <NodeLayout
+          Size="177.333333333334,42.6666666666667"
+          Id="Package\Carga de Fact\Carga sobre Staging"
+          TopLeft="82.7499902335309,211.894744268745" />
+        <NodeLayout
+          Size="153.333333333334,42.6666666666667"
+          Id="Package\Carga de Fact\Limpiar Staging"
+          TopLeft="88.5833234799409,15.2982493402336" />
+        <NodeLayout
+          Size="192,42.6666666666667"
+          Id="Package\Carga de Fact\Ultima Fecha Ejecucion"
+          TopLeft="73.9999903639158,102.421057997648" />
+        <EdgeLayout
+          Id="Package\Carga de Fact.PrecedenceConstraints[Constraint]"
+          TopLeft="170.79165681017,254.561410935412">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,45.8245630691367"
+              Start="0,0"
+              End="0,38.3245630691367">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,38.3245630691367" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Carga de Fact.PrecedenceConstraints[Constraint 1]"
+          TopLeft="167.624990255262,57.9649160069003">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44.4561419907477"
+              Start="0,0"
+              End="0,36.9561419907477">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.9561419907477" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Carga de Fact.PrecedenceConstraints[Constraint 2]"
+          TopLeft="170.708323632057,145.087724664315">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,66.8070196044307"
+              Start="0,0"
+              End="0,59.3070196044307">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,59.3070196044307" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="334,398"
+          Size="334,441.333333333334"
+          Id="Package\Carga de Fact"
+          TopLeft="60,60" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Carga de Fact\Carga sobre Staging">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="154.666666666667,42.6666666666667"
+          Id="Package\Carga de Fact\Carga sobre Staging\Fuente Examen"
+          TopLeft="88.7499986775219,80.7368436249339" />
+        <NodeLayout
+          Size="189.333333333334,42.6666666666667"
+          Id="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen"
+          TopLeft="77.1666655118267,212.10526715025" />
+        <EdgeLayout
+          Id="Package\Carga de Fact\Carga sobre Staging.Paths[OLE DB Source Output]"
+          TopLeft="168.958332094674,123.403510291601">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,88.7017568586495"
+              Start="0,0"
+              End="0,81.2017568586495">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,81.2017568586495" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Carga de Fact\Carga sobre Staging\Fuente Examen">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Carga de Fact\Carga sobre Staging\Carga Staging Examen">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
