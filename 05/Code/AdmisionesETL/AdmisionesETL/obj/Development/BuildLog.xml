@@ -2,7 +2,7 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>AdmisionesETL</Name>
-    <LastWriteTime>2021-09-09T02:13:22.2348707Z</LastWriteTime>
+    <LastWriteTime>2021-09-21T02:34:08.9638827Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
@@ -13,7 +13,12 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>ETLDimensiones.dtsx</Name>
-      <LastWriteTime>2021-09-09T02:31:36.1897906Z</LastWriteTime>
+      <LastWriteTime>2021-09-21T00:28:50.2794678Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>ETLCubo.dtsx</Name>
+      <LastWriteTime>2021-09-21T02:34:08.9268503Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
   </LastBuildInfos>
