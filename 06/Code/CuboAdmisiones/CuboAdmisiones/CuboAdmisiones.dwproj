@@ -6,10 +6,30 @@
     <Name>CuboAdmisiones.database</Name>
     <FullPath>CuboAdmisiones.database</FullPath>
   </Database>
+  <Cubes>
+    <ProjectItem>
+      <Name>Admisiones DWH.cube</Name>
+      <FullPath>Admisiones DWH.cube</FullPath>
+      <Dependencies>
+        <ProjectItem>
+          <Name>Admisiones DWH.partitions</Name>
+          <FullPath>Admisiones DWH.partitions</FullPath>
+        </ProjectItem>
+      </Dependencies>
+    </ProjectItem>
+  </Cubes>
   <Dimensions>
     <ProjectItem>
       <Name>Fecha.dim</Name>
       <FullPath>Fecha.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Carrera.dim</Name>
+      <FullPath>Carrera.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Candidato.dim</Name>
+      <FullPath>Candidato.dim</FullPath>
     </ProjectItem>
   </Dimensions>
   <DataSources>
