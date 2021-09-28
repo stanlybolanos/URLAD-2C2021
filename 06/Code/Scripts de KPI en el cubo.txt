@@ -1,0 +1,26 @@
+
+#Case para el status del KPI
+CASE  
+  WHEN KpiValue("KPINota") > KpiGoal("KPINota")   
+    THEN 2  
+  WHEN KpiValue("KPINota") < KpiGoal("KPINota")   AND
+       KpiValue("KPINota") > 0.65
+     THEN 1  
+  ELSE -1  
+END		        		
+
+#Case para trend de KPI
+CASE  
+  WHEN IsEmpty(ParallelPeriod([Fecha].[JerarquiaFecha].[Year],  
+      1, [Fecha].[JerarquiaFecha]))  
+    THEN 0  
+  WHEN [Measures].[PromedioNota] >  
+    (ParallelPeriod([Fecha].[JerarquiaFecha].[Year],  
+      1, [Fecha].[JerarquiaFecha]), [Measures].[PromedioNota])  
+    THEN 1  
+  WHEN [Measures].[PromedioNota] =  
+    (ParallelPeriod([Fecha].[JerarquiaFecha].[Year],  
+      1, [Fecha].[JerarquiaFecha]), [Measures].[PromedioNota])  
+    THEN 0  
+  ELSE -1  
+END		
