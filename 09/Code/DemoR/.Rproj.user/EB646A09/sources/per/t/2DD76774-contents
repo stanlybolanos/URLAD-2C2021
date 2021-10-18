@@ -1,0 +1,78 @@
+#comandos para instalar paquetes y utilizar librerias
+install.packages("ggplot2")
+install.packages("dplyr")
+library(ggplot2)
+library(dplyr)
+library(DBI)
+library(odbc)
+
+#Creacion de diferentes objetos
+ObjetoCadena<-"Esta es una cadena"
+ObjetoEntero<- 2
+ObjectoVector<- c(1:5)
+
+#exploracion de objetos
+str(ObjetoCadena)
+str(ObjetoEntero)
+str(ObjectoVector)
+typeof(ObjectoVector)
+class(ObjectoVector)
+
+#Data frames
+Temperaturas <- data.frame(Anios=c(2015,2016,2017,2018),
+                           Invierno=c(5,8,7,10),
+                           Primavera=c(10,12,15,13),
+                           Verano=c(25,26,29,32),
+                           Otonio=c(13,14,12,10)
+                           )
+
+Temperaturas$Verano
+head(Temperaturas,2)
+tail(Temperaturas,1)
+
+#dplyr
+#Filtrar informacion
+Temperaturas %>% filter(Anios==2018)
+Temperaturas %>% slice(1:2)
+
+#Ordenar
+Temperaturas %>% arrange(desc(Invierno))
+
+#GroupBys
+TemperaturasRandom <- data.frame(Anios=(sample(c(2015:2018),20,replace = TRUE)),
+                           Invierno=rnorm(20, mean=2, sd=1),
+                           Primavera=rnorm(20, mean=15, sd=3),
+                           Verano=rnorm(20, mean=22, sd=4),
+                           Otonio=rnorm(20, mean=10, sd=2)
+                            )
+
+TemperaturasRandom %>% summarise(TemperaturaPromedio = mean(Invierno))
+TemperaturasRandom %>% group_by(Anios) %>% summarise(TemperaturaPromedio = mean(Invierno))
+TemperaturasRandom %>% slice(1:5) %>% group_by(Anios) %>% summarise(TemperaturaPromedio = mean(Invierno))
+
+#ggplot2
+
+TemperaturasRandomPromedio <- TemperaturasRandom %>% group_by(Anios) %>% summarise(TemperaturaPromedio = mean(Invierno))
+
+ggplot(data=TemperaturasRandomPromedio, aes(x=Anios,y=TemperaturaPromedio))+
+  geom_line()+
+  geom_text(
+    label=TemperaturasRandomPromedio$TemperaturaPromedio, 
+    nudge_x = 0.25, nudge_y = 0.25, 
+    check_overlap = T
+  )
+
+con <- dbConnect(odbc(), Driver = "SQL Server", Server = "localhost", 
+                 Database = "Admisiones_DWH")
+
+dfsql<- dbGetQuery(conn=con,"SELECT e.*,c.NombreFacultad
+                            FROM Fact.Examen E INNER JOIN
+                                 Dimension.Carrera c on (e.sk_carrera = c.sk_carrera)")
+
+
+Df_ConteoPorFacultad <- dfsql %>% count(NombreFacultad)
+
+ggplot(Df_ConteoPorFacultad, aes(x="", y=n, fill=NombreFacultad)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)
+

@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1634176288168.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3228373095",
+    "id" : "2DD76774",
+    "lastKnownWriteTime" : 1634221343,
+    "last_content_update" : 1634221343484,
+    "path" : "C:/temp/DemoR/Demo de R.R",
+    "project_path" : "Demo de R.R",
+    "properties" : {
+        "cursorPosition" : "64,57",
+        "scrollLine" : "62",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
