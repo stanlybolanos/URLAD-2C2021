@@ -3,7 +3,7 @@ data("USArrests")      # cargamos un data set de prueba
 
 arrestos <- scale(USArrests) # con la funcion scale ajustamos todo a la media y sd
 arrestos <- na.omit(arrestos)
-
+write.csv(arrestos,file='arrestos.csv')
 head(arrestos)
 head(USArrests)
 
